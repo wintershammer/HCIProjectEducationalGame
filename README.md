@@ -1,3 +1,5 @@
 # hci-project-edu-game
 
-TODO: UPLOAD THE MODULES AND LIBRARIES!
+My educational roguelike project for HCI. Crawl through dark dungeons and fight evil monsters as the brave Mathemagician! 
+
+TODO: General cleanup and upload the remaining modules
