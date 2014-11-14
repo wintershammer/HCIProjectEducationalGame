@@ -11,12 +11,8 @@ from eventhandler import *
 from pygame.locals import*
 from level_generator import *
 from combat import*
-# isos na boro na xrisomopoiiso kai alla mikra kommatia tou background gia na dimiourgiso enan kiklo h enan stauro-like field of view.kinda like using rectangles/pixels to create a circle
-#ean kanei collide kapou o pexths h kamera sinexizei kai o pextis vgenei ektos view. ara oso kai na ton kinigas me thn kamera
-# o pextis einai panta ligo poio pano
-# isos na mporo na kano blit me blend gri gia oti den exo kanei discover akoma kai "anti-gri" gia oti exo kanei ( antigri + gri = regular xroma?!?)
-# KSEXNA TA WALK INTERVALS.BOTH YOU AND ENEMIES VALTA NA PERPATANE STHN IDIA TAXITITA( PEKSE ME TO FPS GIA SMOOTHER /SLOWER MOVEMENT) KAI VALE KNOCKBACK STIS EPITHESEIS
-# GIA NA MIN KANOUNE KEEP UP WITH YOU OI ENEMIES
+import string
+ 
 animation_interval=20
 particle_life_max=50
 walk_counter = 0
@@ -24,6 +20,48 @@ walk_counter_max = 2
 walk_counter_player = 0
 walk_counter_max_player = 2
 combat_interval=20
+
+def get_key():
+  while 1:
+    event = pygame.event.poll()
+    if event.type == KEYDOWN:
+      return event.key
+    else:
+      pass
+
+def display_box(screen, message):
+  "Print a message in a box in the middle of the screen"
+  fontobject = pygame.font.Font(None,18)
+  pygame.draw.rect(screen, (0,0,0),
+                   ((screen.get_width() / 2) - 100,
+                    (screen.get_height() / 2) - 10,
+                    200,20), 0)
+  pygame.draw.rect(screen, (255,255,255),
+                   ((screen.get_width() / 2) - 102,
+                    (screen.get_height() / 2) - 12,
+                    204,24), 1)
+  if len(message) != 0:
+    screen.blit(fontobject.render(message, 1, (255,255,255)),
+                ((screen.get_width() / 2) - 100, (screen.get_height() / 2) - 10))
+  pygame.display.flip()
+
+def ask(screen, question):
+  "ask(screen, question) -> answer"
+  pygame.font.init()
+  current_string = []
+  display_box(screen, question + ": " + string.join(current_string,""))
+  while 1:
+    inkey = get_key()
+    if inkey == K_BACKSPACE:
+      current_string = current_string[0:-1]
+    elif inkey == K_RETURN:
+      break
+    elif inkey == K_MINUS:
+      current_string.append("_")
+    elif inkey <= 127:
+      current_string.append(chr(inkey))
+    display_box(screen, question + ": " + string.join(current_string,""))
+  return string.join(current_string,"")
 
 if(__name__=="__main__"):
     collidables = [[ True
@@ -60,6 +98,15 @@ if(__name__=="__main__"):
     a_block.set_life(50)
     a_block.set_owner(a_block)
     player_group.add(a_block)
+    spell1 = pygame.image.load("images/spell1.png").convert_alpha()
+    spell2 = pygame.image.load("images/spell2.png").convert_alpha()
+    spell3 = pygame.image.load("images/spell3.png").convert_alpha()
+    selector = pygame.image.load("images/cursor.png").convert_alpha()
+    powericon = pygame.image.load("images/powericon.png").convert_alpha()
+    getrekt = selector.get_rect()
+    spellrect1 = spell1.get_rect()
+    spellrect2 = spell2.get_rect()
+    spellrect3 = spell3.get_rect()
     running = True
     walls=[] # should change name to collidables
     running = True
@@ -78,11 +125,22 @@ if(__name__=="__main__"):
     offset.append(a_block.rect.center[1])
     offset.append(a_block.rect.center[0])
     basicfont = pygame.font.SysFont(None, 20)
+    leinput = 0
+    mousepos=0
+    selectorA = 0
+    pygame.mouse.set_pos(100,100)
     while (running ):
+        pygame.mouse.set_visible(0)
         life=a_block.life
-        if life<=0:
+        if life<=0 and a_block.aoa <= 0: # FIX CALL TO VARIABLE. REPLACE WITH METHOD
             running=False
         if not monster_group and life>0: # defeted all monsters -> procceed to new room
+            if level == 2:
+              textshop = basicfont.render("LEFACE", True, (255, 0, 0))
+              s.fill((0,0,0))
+              s.blit(textshop,(100,100))
+              leinput= ask(s, "Name")
+              shop = False
             collidables = [[ True for y in range(MAP_HEIGHT) ]   for x in range(MAP_WIDTH)]
             level += 1
             block_group= pygame.sprite.Group()
@@ -113,7 +171,9 @@ if(__name__=="__main__"):
             offset.append(a_block.rect.center[0])
             basicfont = pygame.font.SysFont(None, 20)
         h = str(a_block.life)
-        x = "HP: {} LEVEL: {}".format(h,level)
+        for monster in monster_group:
+            enemyhp = str(monster.health)
+        x = "HP: {} LEVEL: {} SOLUTION {} Monster HP {}".format(h,level,leinput,enemyhp)
         text = basicfont.render(x, True, (0, 128, 0))
         offset[1]=(a_block.rect.center[1])
         offset[0]=(a_block.rect.center[0])
@@ -147,13 +207,22 @@ if(__name__=="__main__"):
             if (event.type==pygame.QUIT):
                 running=False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if a_block.ammo>0:
-                        missiles.add(Missile("images/missile_2.png",a_block.rect.center,(event.pos[0]+offset[0]/2-200,event.pos[1]+offset[1]/2-200),window,walls,monster_group,number_of_particles,my_particles ))
-                        a_block.ammo -= 1
+                #if event.button == 3:
+                 #   leinput= ask(window, "Name")
+                if (event.button == 1 and a_block.get_ammo() > 0):
+                    #if a_block.ammo>0:
+                    missiles.add(Missile("images/missile_2.png",a_block.rect.center,(event.pos[0],event.pos[1]),window,walls,monster_group,number_of_particles,my_particles,a_block.get_spldmg()) )
+                    a_block.increment_ammo(-1)
+                if event.button == 3:
+                    for monster in monster_group:
+                      if monster.rect.collidepoint(mousepos) and  monster.get_shield() > 0 and a_block.get_powercharge() > 0:
+                        monster.increment_shield(-1)
+                        a_block.increment_powercharge(-1)
         key = pygame.key.get_pressed()
         for monster in monster_group:
             monster.ai(monster,a_block,walls,walk_counter,walk_counter_max,monster_group,collidables)
+            text2 = basicfont.render(monster.hptext, True, (255, 0, 0))
+            window.blit(text2,(monster.rect.center[0]-10,monster.rect.center[1]-30))
         combat(a_block,monster_group,player_group,my_particles,combat_counter)
         s.fill((0,0,0))
         mask.fill((0,0,0))
@@ -170,10 +239,6 @@ if(__name__=="__main__"):
         player_group.draw(window)
         monster_group.draw(window)
         missiles.draw(window)
-
-        for monster in monster_group:
-           text2 = basicfont.render(str(monster.health), True, (255, 0, 0))
-           window.blit(text2,(monster.rect.center[0]-10,monster.rect.center[1]-30))
         particle_life+=1
         animation_counter+=1
         walk_counter += 1
@@ -191,5 +256,32 @@ if(__name__=="__main__"):
        #pygame.draw.circle(mask,(0,0,0,0),(400,275),50)
         s.blit(mask,(200-offset[0]/2,200-offset[1]/2))
         s.blit(text,(100,0))
+        if a_block.get_ammoType() == 1 :
+          x = str(a_block.get_ammo())
+          text = basicfont.render(x, True, (0, 128, 102))
+          s.blit(spell1, (20,0))
+          s.blit(text,(24,39))
+        elif a_block.get_ammoType() == 2:
+          x = str(a_block.get_ammo())
+          text = basicfont.render(x, True, (0, 128, 102))
+          s.blit(spell2, (20,0))
+          s.blit(text,(24,39))
+        else:
+          x = str(a_block.get_ammo())
+          text = basicfont.render(x, True, (0, 128, 102))
+          s.blit(spell3, (20,0))
+          s.blit(text,(24,39))
+        if a_block.get_powercharge()>0:
+          x= str (a_block.get_powercharge())
+          text=basicfont.render(x,True,(0,128,102))
+          s.blit(powericon,(20,40))
+          s.blit(text,(24,80))
+       # if selectorA > 0: # < 5 (stay for five frames) and > 0 (don't trigger if mousepos is (0,0) ie mouse hasn't been clicked since game start (it causes blit erros too)
+        mousepos = pygame.mouse.get_pos()
+        window.blit(selector,mousepos) # when you blit something at mousepoint it starts from its top left corner. so -32/2 to get it to print it with the middle under the mousepos
+            #selectorA += 1 #stay for 5 frames
+            #print a_block.rect.collidepoint(mousepos[0]-(32/2),mousepos[1]-(32/2))
         pygame.display.flip()
     pygame.quit
+#if selectorA >0 selectorA < 5 and :
+#   s.blit(selector,mousepos) # kane blit mono ean kano click! 
