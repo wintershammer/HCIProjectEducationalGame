@@ -99,6 +99,7 @@ if(__name__=="__main__"):
     a_block.set_life(50)
     a_block.set_owner(a_block)
     player_group.add(a_block)
+    pygame.mixer.music.load("sounds/Corfu_Ship_WaltzOldified.wav")
     spell1 = pygame.image.load("images/spell1.png").convert_alpha()
     spell2 = pygame.image.load("images/spell2.png").convert_alpha()
     spell3 = pygame.image.load("images/spell3.png").convert_alpha()
@@ -131,7 +132,10 @@ if(__name__=="__main__"):
     mousepos=0
     selectorA = 0
     pygame.mouse.set_pos(100,100)
+    pygame.mixer.music.set_volume(0.6)
+    pygame.mixer.music.play(-1)
     while (running ):
+        
         pygame.mouse.set_visible(0)
         life=a_block.life
         if life<=0 and a_block.aoa <= 0: # FIX CALL TO VARIABLE. REPLACE WITH METHOD
