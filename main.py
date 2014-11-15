@@ -11,8 +11,9 @@ from eventhandler import *
 from pygame.locals import*
 from level_generator import *
 from combat import*
+from shop import*
 import string
- 
+
 animation_interval=20
 particle_life_max=50
 walk_counter = 0
@@ -103,6 +104,7 @@ if(__name__=="__main__"):
     spell3 = pygame.image.load("images/spell3.png").convert_alpha()
     selector = pygame.image.load("images/cursor.png").convert_alpha()
     powericon = pygame.image.load("images/powericon.png").convert_alpha()
+    aoaicon = pygame.image.load("images/armoroa.png").convert_alpha()
     getrekt = selector.get_rect()
     spellrect1 = spell1.get_rect()
     spellrect2 = spell2.get_rect()
@@ -135,11 +137,8 @@ if(__name__=="__main__"):
         if life<=0 and a_block.aoa <= 0: # FIX CALL TO VARIABLE. REPLACE WITH METHOD
             running=False
         if not monster_group and life>0: # defeted all monsters -> procceed to new room
-            if level == 2:
-              textshop = basicfont.render("LEFACE", True, (255, 0, 0))
-              s.fill((0,0,0))
-              s.blit(textshop,(100,100))
-              leinput= ask(s, "Name")
+            if level % 2 == 0:
+              ShopGenerator(s)
               shop = False
             collidables = [[ True for y in range(MAP_HEIGHT) ]   for x in range(MAP_WIDTH)]
             level += 1
@@ -276,6 +275,12 @@ if(__name__=="__main__"):
           text=basicfont.render(x,True,(0,128,102))
           s.blit(powericon,(20,40))
           s.blit(text,(24,80))
+        if a_block.get_invisibility() > 0:
+          a_block.increment_invisibility(-1)
+          x = str (a_block.get_invisibility())
+          text=basicfont.render(x,True,(0,128,102))
+          s.blit(aoaicon,(50,70))
+          s.blit(text,(62,102))
        # if selectorA > 0: # < 5 (stay for five frames) and > 0 (don't trigger if mousepos is (0,0) ie mouse hasn't been clicked since game start (it causes blit erros too)
         mousepos = pygame.mouse.get_pos()
         window.blit(selector,mousepos) # when you blit something at mousepoint it starts from its top left corner. so -32/2 to get it to print it with the middle under the mousepos

@@ -34,6 +34,7 @@ class Block(pygame.sprite.Sprite):
         self.ammoDmg3 = 15
         self.powercharge = 10 #testing
         self.aoa = 0 #armor of absolute
+        self.invisibility = 0
         
     def equip_item(self,effect_type,effect_value):
         if effect_type == 1:
@@ -87,6 +88,8 @@ class Block(pygame.sprite.Sprite):
     def get_spldmg(self):
         return self.spldmg
 
+    def get_invisibility(self):
+        return self.invisibility
 
     def get_ammo(self):
         if self.ammoType == 1:
@@ -124,7 +127,11 @@ class Block(pygame.sprite.Sprite):
             self.ammoDamage2 = value
         else:
             self.ammoDamage3 = value
-            
+
+
+    def increment_invisibility(self,value):
+        self.invisibility += value
+        
     def increment_ammo(self,value):
         if self.ammoType == 1:
             self.ammo1 += value
@@ -133,12 +140,14 @@ class Block(pygame.sprite.Sprite):
         else:
             self.ammo3 += value
     def death(self,player_group,damage):
-        self.life -= damage
+        if(self.invisibility == 0):
+            self.life -= damage
         if self.life <= 0 and self.aoa <= 0:
             player_group.remove(self.owner)
         elif self.life <= 0 and self.aoa >= 1:
             self.life += damage
             self.aoa -= 1
+            self.invisibility = 200
 
     def set_image(self,filename=None):
         if(filename!=None):

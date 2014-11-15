@@ -162,12 +162,10 @@ def collide_creator(collidables,walls,map):
                 walls.append(map[i][j])
 
 
-
-
 def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max_items,level):
     monsters = []
     numtrees = 0
-    for i in range (0,3):
+    for i in range (0,2):
         manster= Monster()
         monsters.append(manster)
         #print y
@@ -185,8 +183,7 @@ def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max
         monster.set_position(room_x*32+randx,room_y*32+randy)
         monster_group.add(monster)
         monster.set_health(20+level*5)
-    x = random.randint(0,5)
-    y=random.randint(0,1)
+    x = random.randint(1,3)
 ##    if x == 2 or x == 5:
 ##        for i in range(0,max_items):
 ##            bow = Item()
@@ -198,22 +195,21 @@ def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max
 ##            bow.effects(y+1,5)
 ##            items_group.add(bow)
 
-    if x == 1 or x == 2 or x == 3:
-        for i in range (0,max_items):
-            newItem = Item()
-##            if y == 1:
-##                newItem.set_image("images/potion.png")
-##                newItem.set_position(room_x*32+x*2,room_y*32)
-##                newItem.set_owner(newItem)
-##                newItem.effects(y+1,5)
-##                items_group.add(newItem)
-##            elif y == 0:
-##                newItem.set_image("images/bow_1.png")
-##                newItem.set_position(room_x*32+x*2,room_y*32)
-##                newItem.set_owner(newItem)
-##                newItem.effects(y+1,5)
-##                items_group.add(newItem)
-            #else:
+    for i in range (0,max_items):
+        newItem = Item()
+        if x == 1:
+            newItem.set_image("images/potion.png")
+            newItem.set_position(room_x*32+x*2,room_y*32)
+            newItem.set_owner(newItem)
+            newItem.effects(x,5)
+            items_group.add(newItem)
+        elif x == 2:
+            newItem.set_image("images/bow_1.png")
+            newItem.set_position(room_x*32+x*2,room_y*32)
+            newItem.set_owner(newItem)
+            newItem.effects(x,5)
+            items_group.add(newItem)
+        else:
             newItem.set_image("images/armoroa.png")
             newItem.set_position(room_x*32+x*2,room_y*32)
             newItem.set_owner(newItem)
