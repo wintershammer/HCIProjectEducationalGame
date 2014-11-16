@@ -13,7 +13,7 @@ from level_generator import *
 from combat import*
 from shop import*
 import string
-
+ 
 animation_interval=20
 particle_life_max=50
 walk_counter = 0
@@ -132,10 +132,10 @@ if(__name__=="__main__"):
     mousepos=0
     selectorA = 0
     pygame.mouse.set_pos(100,100)
-    pygame.mixer.music.set_volume(0.6)
+    pygame.mouse.set_pos(100,100)
+    pygame.mixer.music.set_volume(0.3)
     pygame.mixer.music.play(-1)
     while (running ):
-        
         pygame.mouse.set_visible(0)
         life=a_block.life
         if life<=0 and a_block.aoa <= 0: # FIX CALL TO VARIABLE. REPLACE WITH METHOD
@@ -214,7 +214,7 @@ if(__name__=="__main__"):
                  #   leinput= ask(window, "Name")
                 if (event.button == 1 and a_block.get_ammo() > 0):
                     #if a_block.ammo>0:
-                    missiles.add(Missile("images/missile_2.png",a_block.rect.center,(event.pos[0],event.pos[1]),window,walls,monster_group,number_of_particles,my_particles,a_block.get_spldmg()) )
+                    missiles.add(Missile("images/missile_2.png",a_block.rect.center,(event.pos[0],event.pos[1]),window,walls,monster_group,number_of_particles,my_particles,a_block.get_spldmg(),a_block.get_pie()) )
                     a_block.increment_ammo(-1)
                 if event.button == 3:
                     for monster in monster_group:

@@ -35,6 +35,7 @@ class Block(pygame.sprite.Sprite):
         self.powercharge = 10 #testing
         self.aoa = 0 #armor of absolute
         self.invisibility = 0
+        self.pie = False # Pi ITEM! True GIA TESTING. genika einai false!
         
     def equip_item(self,effect_type,effect_value):
         if effect_type == 1:
@@ -45,6 +46,8 @@ class Block(pygame.sprite.Sprite):
             self.powercharge += effect_value #effect_value here is charges of I GOT THE POWAH scroll/spell!
         if effect_type == 4: # Armor of absolute
             self.aoa = 1
+        if effect_type == 5:
+            self.pie = True
             
     def increment_powercharge(self,value):
         self.powercharge += value
@@ -52,6 +55,9 @@ class Block(pygame.sprite.Sprite):
     def get_powercharge(self):
         return self.powercharge
 
+    def get_pie(self):
+        return self.pie
+    
     def set_owner(self,owner):
         self.owner=owner
     def set_life(self,hp):
