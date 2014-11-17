@@ -147,7 +147,10 @@ class Block(pygame.sprite.Sprite):
             self.ammo3 += value
     def death(self,player_group,damage):
         if(self.invisibility == 0):
+            snd1 = pygame.mixer.Sound("sounds/HitEffect.wav")
+            snd1.play()
             self.life -= damage
+            self.invisibility = 200
         if self.life <= 0 and self.aoa <= 0:
             player_group.remove(self.owner)
         elif self.life <= 0 and self.aoa >= 1:

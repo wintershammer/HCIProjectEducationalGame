@@ -13,7 +13,7 @@ from level_generator import *
 from combat import*
 from shop import*
 import string
- 
+
 animation_interval=20
 particle_life_max=50
 walk_counter = 0
@@ -162,7 +162,11 @@ if(__name__=="__main__"):
             missiles = pygame.sprite.RenderUpdates()
             animation_counter=0
             #floor = pygame.image.load("images/floor.png")
-            make_map(floor_group,walls,a_block,monster_group,items_group,level,collidables)
+            
+            if(level == 2):
+              make_boss_map(floor_group,walls,a_block,monster_group,items_group,level,collidables)
+            else:
+              make_map(floor_group,walls,a_block,monster_group,items_group,level,collidables)
             camera=[]
             camera.append(a_block.rect.x-50)
             camera.append(a_block.rect.y-50)
@@ -176,7 +180,7 @@ if(__name__=="__main__"):
         h = str(a_block.life)
         for monster in monster_group:
             enemyhp = str(monster.health)
-        x = "HP: {} LEVEL: {} SOLUTION {} Monster HP {}".format(h,level,leinput,enemyhp)
+        x = "HP: {} LEVEL: {} ".format(h,level)
         text = basicfont.render(x, True, (0, 128, 0))
         offset[1]=(a_block.rect.center[1])
         offset[0]=(a_block.rect.center[0])
@@ -283,8 +287,11 @@ if(__name__=="__main__"):
           a_block.increment_invisibility(-1)
           x = str (a_block.get_invisibility())
           text=basicfont.render(x,True,(0,128,102))
-          s.blit(aoaicon,(50,70))
-          s.blit(text,(62,102))
+          #s.blit(aoaicon,(50,70))
+          #s.blit(text,(62,102))
+          if(a_block.get_invisibility () % 5 >= 0): #every fifty frames blink image
+            a_block.image=pygame.image.load('images/blank.png')
+            a_block.image.set_colorkey((255,255,255))
        # if selectorA > 0: # < 5 (stay for five frames) and > 0 (don't trigger if mousepos is (0,0) ie mouse hasn't been clicked since game start (it causes blit erros too)
         mousepos = pygame.mouse.get_pos()
         window.blit(selector,mousepos) # when you blit something at mousepoint it starts from its top left corner. so -32/2 to get it to print it with the middle under the mousepos

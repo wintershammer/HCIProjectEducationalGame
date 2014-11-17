@@ -36,7 +36,7 @@ class Rect:
 
 
 
-	
+
 
         
 def create_room(room,floor_group,collidables):
@@ -49,7 +49,15 @@ def create_room(room,floor_group,collidables):
             floor_group.add(map[x][y])
             collidables[x][y]=False
 
-
+def create_boss_room(floor_group,collidables):
+    global map
+    
+    for x in range(1, MAP_WIDTH-1):
+        for y in range(1, MAP_HEIGHT-1):
+            map[x][y].set_image("images/floor.png")
+            map[x][y].set_position(x*32,y*32)
+            floor_group.add(map[x][y])
+            collidables[x][y]=False
 
 def create_h_tunnel(x1, x2, y,floor_group,collidables):
     global map
@@ -98,7 +106,7 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
         
         new_room = Rect(x, y, w, h)
  
-       
+        
         failed = False
         for other_room in rooms:
             if new_room.intersect(other_room):
@@ -108,28 +116,29 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
         if not failed:
             
  
-           
+            
             create_room(new_room,floor_group,collidables)
  
             
             (new_x, new_y) = new_room.center()
  
             if num_rooms == 0:
-              
+                
                 a_block.rect.x=new_x*32
                 a_block.rect.y= new_y*32
             else:
                 
+                
  
-               
+                
                 (prev_x, prev_y) = rooms[num_rooms-1].center()
 
 
-               
-                populateDungeon(map,new_x,new_y,5,monster_group,items_group,2,level)
+                
+                populateDungeon(map,new_x,new_y,5,monster_group,items_group,2,level,False)
 
                  
-               
+                
                 if random.randint(0, 1) == 1:
                     
                     create_h_tunnel(prev_x, new_x, prev_y,floor_group,collidables)
@@ -139,7 +148,7 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
                     create_v_tunnel(prev_y, new_y, prev_x,floor_group,collidables)
                     create_h_tunnel(prev_x, new_x, new_y,floor_group,collidables)
  
-           
+            
             rooms.append(new_room)
             num_rooms += 1
     for x in range(0, MAP_WIDTH):
@@ -153,6 +162,33 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
 
 
 
+def make_boss_map(floor_group,walls,a_block,monster_group,items_group,level,collidables): # i will merge this with make_map when its done!
+    global map, player
+ 
+    
+    map = [[ Block()
+        for y in range(MAP_HEIGHT) ]
+            for x in range(MAP_WIDTH)]
+
+
+    rooms = []
+    num_rooms = 0
+ 
+
+    create_boss_room(floor_group,collidables)
+    populateDungeon(map,MAP_WIDTH/2,MAP_HEIGHT/2,2,monster_group,items_group,2,level,True)
+    a_block.rect.x = 60
+    a_block.rect.y = 60
+    
+    for x in range(0, MAP_WIDTH):
+        for y in range(0,MAP_HEIGHT):
+            if collidables[x][y] == True :
+                map[x][y].set_image("images/wall_n.png")
+                map[x][y].set_position(x*32,y*32)
+                floor_group.add(map[x][y])
+            
+    collide_creator(collidables,walls,map)
+
 
 
 def collide_creator(collidables,walls,map):
@@ -164,27 +200,45 @@ def collide_creator(collidables,walls,map):
 
 
 
-def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max_items,level):
+def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max_items,level,boss_room):
     monsters = []
     numtrees = 0
     for i in range (0,2):
-        manster= Monster()
-        monsters.append(manster)
-        #print y
-    for monster in monsters:
-        randx=random.randint(-50,50)
-        randy=random.randint(-50,50)
-        if level > 1:
-            chooser = random.randint(0,1)
-            if chooser == 1:
-                monster.create_orc()
-            else:
-                monster.create_tree()
+        if(boss_room == False):
+            manster= Monster()
+            monsters.append(manster)
+            #print y
         else:
-            monster.create_orc()
-        monster.set_position(room_x*32+randx,room_y*32+randy)
-        monster_group.add(monster)
-        monster.set_health(20+level*5)
+            twinX = Monster()
+            monsters.append(twinX)
+            twinY = Monster()
+            monsters.append(twinY)
+    for monster in monsters:
+        if(boss_room == False):
+            randx=random.randint(-50,50)
+            randy=random.randint(-50,50)
+            if level > 1:
+                chooser = random.randint(0,1)
+                if chooser == 1:
+                    monster.create_orc()
+                else:
+                    monster.create_tree()
+            else:
+                monster.create_orc()
+            monster.set_position(room_x*32+randx,room_y*32+randy)
+            monster_group.add(monster)
+            monster.set_health(20+level*5)
+        else:
+            if(monster == twinX):
+                monster.create_boss(1)
+            else:
+                monster.create_boss(2)
+            if(monster == twinX):
+                monster.set_position(32 * MAP_WIDTH/2,32 * MAP_HEIGHT/2)
+            else:
+                monster.set_position(20 * MAP_WIDTH/2,20 * MAP_HEIGHT/2)
+            monster_group.add(monster)
+            
     x = random.randint(1,5)
 ##    if x == 2 or x == 5:
 ##        for i in range(0,max_items):
@@ -217,7 +271,7 @@ def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max
             newItem.set_owner(newItem)
             newItem.effects(4,5)
             items_group.add(newItem)
-	else:
+        elif (x == 5):
             newItem.set_image("images/pie.png")
             newItem.set_position(room_x*32+x*2,room_y*32)
             newItem.set_owner(newItem)

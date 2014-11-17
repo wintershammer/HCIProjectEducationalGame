@@ -54,12 +54,13 @@ class Missile(pygame.sprite.Sprite):
 
         for monster in self.monsters:
             if pygame.sprite.collide_mask(self,monster)!= None:
-                monster.death(self.monsters,int(self.damage),walls)
+                if(monster.twin == 1 or monster.twin == 2):
+                    monster.death_twins(self.monsters,int(self.damage),walls)
+                else:
+                    monster.death(self.monsters,int(self.damage),walls)
                 self.target_hit=True
                 coord=self.rect.center
                 #particle(coord)
-                #particle_create(coord,self.number_of_particles,self.my_particles,self.screen)
-
-    
+                #particle_create(coord,self.number_of_particles,self.my_particles,self.screen)    
         if self.target_hit==True:
             self.kill()

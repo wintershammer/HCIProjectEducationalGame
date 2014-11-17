@@ -28,4 +28,7 @@ def combat_player_attack(player,monster_group,player_group,walls):
     for monster in monster_group:
         if player.weapon==0:
             if monster.distance_to(player)<=40:
-                monster.death(monster_group,5,walls)
+                if(monster.twin == 1 or monster.twin == 2):
+                    monster.death_twins(monster_group,5,walls)
+                else:
+                    monster.death(monster_group,5,walls)

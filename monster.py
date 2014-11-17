@@ -21,6 +21,8 @@ class Monster(pygame.sprite.Sprite):
         self.speed=1
         self.hptext = " "
         self.shield = 0
+        self.twin = 0 # i should make a boss subclass!
+        self.other_twin_dead = False
 
     def set_attack_mode(self,mode):
         self.attack_mode=mode
@@ -46,22 +48,44 @@ class Monster(pygame.sprite.Sprite):
         self.set_attack_mode(1)
         self.set_range(200)
         self.set_damage(1)
-        self.set_health(20)
+        #self.set_health(20)
         self.set_owner(self)
         self.set_image("images/orc_1.png")
     
     def create_tree(self):
+        self.set_attack_mode(1)
+        self.set_range(60)
+        self.set_image
+        self.set_damage(10)
+        #self.set_health(30)
+        self.set_owner(self)
+        self.set_image("images/treetemp.png")
+        self.set_shield(1)
+
+    def set_twin(self,value):
+        self.twin = value
+
+    def create_boss(self,name): # values are not balanced!
+        if (name == 1):
             self.set_attack_mode(1)
             self.set_range(60)
-            self.set_image
+            self.set_image("images/twinX.png")
             self.set_damage(10)
-            self.set_health(30)
+            self.health = 20
+            self.hptext = str(self.health)
             self.set_owner(self)
-            self.set_image("images/treetemp.png")
-            self.set_shield(1)
-            
-
-
+            self.set_shield(0)
+            self.set_twin(1)
+        elif (name == 2):
+            self.set_attack_mode(1)
+            self.set_range(60)
+            self.set_image("images/twinY.png")
+            self.set_damage(10)
+            self.health = 20
+            self.hptext = str(self.health)
+            self.set_owner(self)
+            self.set_shield(0)
+            self.set_twin(2)
 
 
     def increment_shield(self,value):
@@ -159,7 +183,7 @@ class Monster(pygame.sprite.Sprite):
         if monster.distance_to(target) <= monster.range and monster.distance_to(target) >= 20 and walk_counter == walk_counter_max-1:
                 monster.move_towards(target.rect.x, target.rect.y,walls,monster,monster_group,collidables)
 
-    def health(self,health):
+    def old_health(self,health):
         self.health = health
 
 
@@ -173,7 +197,7 @@ class Monster(pygame.sprite.Sprite):
         self.set_range(999)
         #self.range=100 # the monster is alert of your presence
         if self.health>20:
-            self.knockback(10,walls,monster_group)
+            self.knockback(5,walls,monster_group)
         else:
             self.speed=3
             #print "ORC IS ENRAGED"
@@ -182,7 +206,23 @@ class Monster(pygame.sprite.Sprite):
         if self.health <= 0:
             monster_group.remove(self.owner)
 
+    def death_twins(self,monster_group,damage,walls): # TESTING:once i move them to their own class I will have no need for such awkward code.
 
+
+        if(self.twin == 2):
+
+            if(self.other_twin_dead == True):              
+                self.health -= damage
+        else:
+            self.health -= damage
+        
+        if self.health <= 0:
+            if(self.twin == 1):
+                for monster in monster_group :
+                    if monster.twin == 2:
+                        secondTwin = monster
+                        secondTwin.other_twin_dead = True
+            monster_group.remove(self.owner)        
 
 
 
