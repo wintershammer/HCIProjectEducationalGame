@@ -6,6 +6,7 @@ from pygame.locals import*
 from item import *
 from block import *
 from combat import*
+from codex import*
 
 offset_top=1
 offset_bottom=0
@@ -13,7 +14,7 @@ offset_left=5
 offset_right=-5  # panta peftei me thn deksia meria pano sto wall logo tou image.transform.flip ara left= -right
 step = 3
 
-def handle_event(event,key,obj,block_group,player_group,walls,animation_counter,animation_interval,camera,monster_group,item_group,collidables):
+def handle_event(event,key,obj,block_group,player_group,walls,animation_counter,animation_interval,camera,monster_group,item_group,collidables,screen,window):
     dx=0
     dy=0
 ##    if event.type == KEYDOWN:
@@ -97,6 +98,14 @@ def handle_event(event,key,obj,block_group,player_group,walls,animation_counter,
             obj.image=pygame.image.load('images/knight_right_1.png')
             obj.image.set_colorkey((255,255,255))
         #obj.set_direction('right')
+            
+    if key[K_i]:
+        #window.fill((0,0,0))
+        codexViewer(1,screen,window)
+
+
+
+
     if key[K_SPACE] :
         if animation_counter<=animation_interval/2:
             combat_player_attack(obj,monster_group,player_group,walls)

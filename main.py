@@ -11,7 +11,8 @@ from eventhandler import *
 from pygame.locals import*
 from level_generator import *
 from combat import*
-from shop import*
+from shop import *
+from questioner import*
 import string
 
 animation_interval=20
@@ -22,47 +23,7 @@ walk_counter_player = 0
 walk_counter_max_player = 2
 combat_interval=20
 
-def get_key():
-  while 1:
-    event = pygame.event.poll()
-    if event.type == KEYDOWN:
-      return event.key
-    else:
-      pass
 
-def display_box(screen, message):
-  "Print a message in a box in the middle of the screen"
-  fontobject = pygame.font.Font(None,18)
-  pygame.draw.rect(screen, (0,0,0),
-                   ((screen.get_width() / 2) - 100,
-                    (screen.get_height() / 2) - 10,
-                    200,20), 0)
-  pygame.draw.rect(screen, (255,255,255),
-                   ((screen.get_width() / 2) - 102,
-                    (screen.get_height() / 2) - 12,
-                    204,24), 1)
-  if len(message) != 0:
-    screen.blit(fontobject.render(message, 1, (255,255,255)),
-                ((screen.get_width() / 2) - 100, (screen.get_height() / 2) - 10))
-  pygame.display.flip()
-
-def ask(screen, question):
-  "ask(screen, question) -> answer"
-  pygame.font.init()
-  current_string = []
-  display_box(screen, question + ": " + string.join(current_string,""))
-  while 1:
-    inkey = get_key()
-    if inkey == K_BACKSPACE:
-      current_string = current_string[0:-1]
-    elif inkey == K_RETURN:
-      break
-    elif inkey == K_MINUS:
-      current_string.append("_")
-    elif inkey <= 127:
-      current_string.append(chr(inkey))
-    display_box(screen, question + ": " + string.join(current_string,""))
-  return string.join(current_string,"")
 
 if(__name__=="__main__"):
     collidables = [[ True
@@ -237,7 +198,7 @@ if(__name__=="__main__"):
         #s.blit(fog,(0,0))
         #s.blit(window, (background_rect.x+camera[0],background_rect.y+camera[1]),(0+camera[0],0+camera[1], 100, 100))
         if walk_counter_player == walk_counter_max_player-1:
-            handle_event(event,key,a_block,block_group,player_group,walls,animation_counter,animation_interval,camera,monster_group,items_group,collidables)
+            handle_event(event,key,a_block,block_group,player_group,walls,animation_counter,animation_interval,camera,monster_group,items_group,collidables,s,window)
         clock.tick(fps)
         #monster.render(monster_group,monster,a_block)
         floor_group.draw(window)
