@@ -13,6 +13,8 @@ def codexViewer(page,s,window):
         shopStory = pygame.image.load("images/codex2.png")
     elif(page == 3):
         shopStory = pygame.image.load("images/codex3.png")
+    elif(page == 4):
+        shopStory = pygame.image.load("images/codex4.png")
     window.fill((0,0,0))
     s.fill((0,0,0))
     s.blit(shopStory,(0,0))
