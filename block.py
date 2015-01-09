@@ -2,6 +2,7 @@ import pygame
 import math
 import random
 import time
+from monster import *
 from pygame.locals import*
 
 
@@ -24,14 +25,14 @@ class Block(pygame.sprite.Sprite):
         self.strength=0
         self.agility=0
         self.intelligence=0
-        self.ammo1=10
-        self.ammo2=6
-        self.ammo3=2
+        self.ammo1=5
+        self.ammo2=5
+        self.ammo3=5
         self.spldmg=0;
         self.ammoType=1
-        self.ammoDmg1 = 5
-        self.ammoDmg2 = 10
-        self.ammoDmg3 = 15
+        self.ammoDmg1 = Monster.healthPool[0]
+        self.ammoDmg2 =  Monster.healthPool[1]
+        self.ammoDmg3 =  Monster.healthPool[2]
         self.powercharge = 10 #testing
         self.aoa = 0 #armor of absolute
         self.invisibility = 0
@@ -104,6 +105,14 @@ class Block(pygame.sprite.Sprite):
             return self.ammo2
         else:
             return self.ammo3
+
+    def get_ammoDmg(self):
+        if self.ammoType == 1:
+            return self.ammoDmg1
+        elif self.ammoType == 2:
+            return self.ammoDmg2
+        else:
+            return self.ammoDmg3
 
     def set_ammo(self,ammoType,value):
         if ammoType == 1:

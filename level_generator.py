@@ -29,7 +29,6 @@ class Rect:
         return (center_x, center_y)
  
     def intersect(self, other):
-        
         return (self.x1 <= other.x2 and self.x2 >= other.x1 and
                 self.y1 <= other.y2 and self.y2 >= other.y1)
 
@@ -74,7 +73,7 @@ def create_h_tunnel(x1, x2, y,floor_group,collidables):
  
 def create_v_tunnel(y1, y2, x,floor_group,collidables):
     global map
-    #vertical tunnel
+    
     for y in range(min(y1, y2), max(y1, y2) + 1):
         map[x][y].set_image("images/floor.png")
         map[x][y].set_position(x*32,y*32)
@@ -86,7 +85,7 @@ def create_v_tunnel(y1, y2, x,floor_group,collidables):
 def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidables):
     global map, player
  
-    #gemise ton pinaka me blocks ftiaxe ta rooms allazontas ta blocks
+    
     map = [[ Block()
         for y in range(MAP_HEIGHT) ]
             for x in range(MAP_WIDTH)]
@@ -96,17 +95,13 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
     num_rooms = 0
  
     for r in range(MAX_ROOMS):
-        
         w = random.randint(ROOM_MIN_SIZE,ROOM_MAX_SIZE)
         h = random.randint(ROOM_MIN_SIZE,ROOM_MAX_SIZE)
-        
         x = random.randint(0, MAP_WIDTH - w - 1)
         y = random.randint(0, MAP_WIDTH - h - 1)
  
-        
         new_room = Rect(x, y, w, h)
  
-        
         failed = False
         for other_room in rooms:
             if new_room.intersect(other_room):
@@ -114,41 +109,29 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
                 break
  
         if not failed:
-            
  
-            
             create_room(new_room,floor_group,collidables)
  
-            
             (new_x, new_y) = new_room.center()
  
             if num_rooms == 0:
-                
                 a_block.rect.x=new_x*32
                 a_block.rect.y= new_y*32
             else:
-                
-                
  
-                
                 (prev_x, prev_y) = rooms[num_rooms-1].center()
 
 
-                
                 populateDungeon(map,new_x,new_y,5,monster_group,items_group,2,level,False)
 
                  
-                
                 if random.randint(0, 1) == 1:
-                    
                     create_h_tunnel(prev_x, new_x, prev_y,floor_group,collidables)
                     create_v_tunnel(prev_y, new_y, new_x,floor_group,collidables)
                 else:
-                    
                     create_v_tunnel(prev_y, new_y, prev_x,floor_group,collidables)
                     create_h_tunnel(prev_x, new_x, new_y,floor_group,collidables)
  
-            
             rooms.append(new_room)
             num_rooms += 1
     for x in range(0, MAP_WIDTH):
@@ -165,7 +148,6 @@ def make_map(floor_group,walls,a_block,monster_group,items_group,level,collidabl
 def make_boss_map(floor_group,walls,a_block,monster_group,items_group,level,collidables): # i will merge this with make_map when its done!
     global map, player
  
-    
     map = [[ Block()
         for y in range(MAP_HEIGHT) ]
             for x in range(MAP_WIDTH)]
@@ -227,7 +209,9 @@ def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max
                 monster.create_orc()
             monster.set_position(room_x*32+randx,room_y*32+randy)
             monster_group.add(monster)
-            monster.set_health(20+level*5)
+        
+            randHP = random.randint(0,2)
+            monster.set_health(Monster.healthPool[randHP])
         else:
             if(monster == twinX):
                 monster.create_boss(1)

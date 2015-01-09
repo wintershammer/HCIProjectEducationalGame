@@ -1,7 +1,7 @@
 import pygame
 import math
 import time
-from random import randrange
+import random
 from block import *
 from item import*
 from monster import*
@@ -54,10 +54,16 @@ if(__name__=="__main__"):
     player_group=pygame.sprite.Group()
     items_group=pygame.sprite.Group()
     monster_group=pygame.sprite.Group()
+    randHPval1 = random.randint(20,40)
+    randHPval2 = random.randint(20,40)    
+    randHPval3 = random.randint(20,40)        
+    Monster.healthPool.append(randHPval1)
+    Monster.healthPool.append(randHPval2)
+    Monster.healthPool.append(randHPval3)
     a_block=Block()
     a_block.set_image("images/knight_1.png")
     a_block.set_position(0,0)
-    a_block.set_life(50)
+    a_block.set_life(5)
     a_block.set_owner(a_block)
     player_group.add(a_block)
     pygame.mixer.music.load("sounds/Corfu_Ship_WaltzOldified.wav")
@@ -94,8 +100,9 @@ if(__name__=="__main__"):
     selectorA = 0
     pygame.mouse.set_pos(100,100)
     pygame.mouse.set_pos(100,100)
-    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.set_volume(0.0)
     pygame.mixer.music.play(-1)
+    print(Monster.healthPool)
     while (running ):
         pygame.mouse.set_visible(0)
         life=a_block.life
@@ -145,9 +152,9 @@ if(__name__=="__main__"):
         text = basicfont.render(x, True, (0, 128, 0))
         offset[1]=(a_block.rect.center[1])
         offset[0]=(a_block.rect.center[0])
-        n=randrange(0,6)
-        m=randrange(0,6)
-        x=randrange(0,20)
+        n=random.randrange(0,6)
+        m=random.randrange(0,6)
+        x=random.randrange(0,20)
         light_pos_1=(camera[0]+65+n,camera[1]+80+m) #flickering
         light_pos=(camera[0]+65,camera[1]+80)
         radius = 200
@@ -227,18 +234,24 @@ if(__name__=="__main__"):
         if a_block.get_ammoType() == 1 :
           x = str(a_block.get_ammo())
           text = basicfont.render(x, True, (0, 128, 102))
+          text2 = basicfont.render("DMG: " + str(a_block.get_ammoDmg()), True, (0, 128, 102))          
           s.blit(spell1, (20,0))
-          s.blit(text,(24,39))
+          s.blit(text,(23,39))
+          s.blit(text2,(60,39))          
         elif a_block.get_ammoType() == 2:
           x = str(a_block.get_ammo())
           text = basicfont.render(x, True, (0, 128, 102))
+          text2 = basicfont.render("DMG: " + str(a_block.get_ammoDmg()), True, (0, 128, 102))              
           s.blit(spell2, (20,0))
           s.blit(text,(24,39))
+          s.blit(text2,(60,39))           
         else:
           x = str(a_block.get_ammo())
           text = basicfont.render(x, True, (0, 128, 102))
+          text2 = basicfont.render("DMG: " + str(a_block.get_ammoDmg()), True, (0, 128, 102))    
           s.blit(spell3, (20,0))
           s.blit(text,(24,39))
+          s.blit(text2,(60,39)) 
         if a_block.get_powercharge()>0:
           x= str (a_block.get_powercharge())
           text=basicfont.render(x,True,(0,128,102))

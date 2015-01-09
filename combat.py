@@ -31,4 +31,4 @@ def combat_player_attack(player,monster_group,player_group,walls):
                 if(monster.twin == 1 or monster.twin == 2):
                     monster.death_twins(monster_group,5,walls)
                 else:
-                    monster.death(monster_group,5,walls)
+                    monster.death(monster_group,5,walls) #5 is melee test damage for now. i should be getting this from player.get_meleeDmg()
