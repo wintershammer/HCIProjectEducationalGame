@@ -100,7 +100,8 @@ def handle_event(event,key,obj,block_group,player_group,walls,animation_counter,
         #obj.set_direction('right')
             
     if key[K_i]:
-        #window.fill((0,0,0))
+        window.fill((0,0,0))
+        screen.fill((0,0,0))
         codexViewer(1,screen,window)
 
 
