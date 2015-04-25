@@ -44,7 +44,7 @@ class Block(pygame.sprite.Sprite):
         if effect_type == 2:
             self.ammo1 += effect_value
         if effect_type == 3:
-            self.powercharge += effect_value #effect_value here is charges of I GOT THE POWAH scroll/spell!
+            self.powercharge += effect_value #effect_value here is charges of power scroll/spell!
         if effect_type == 4: # Armor of absolute
             self.aoa = 1
         if effect_type == 5:
@@ -89,9 +89,7 @@ class Block(pygame.sprite.Sprite):
                 camera[1]-=int (math.fabs(dy))
 
 
-    #def set_spldmg(self,value):
-     #   self.spldmg = value
-        
+
     def get_spldmg(self):
         return self.spldmg
 
