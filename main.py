@@ -78,11 +78,11 @@ if(__name__=="__main__"):
     spellrect2 = spell2.get_rect()
     spellrect3 = spell3.get_rect()
     running = True
-    walls=[] # should change name to collidables
+    walls=[] 
     running = True
     missiles = pygame.sprite.RenderUpdates()
     animation_counter=0
-    #floor = pygame.image.load("images/floor.png")
+
     level=1
     make_map(floor_group,walls,a_block,monster_group,items_group,level,collidables)
     camera=[]
@@ -106,9 +106,9 @@ if(__name__=="__main__"):
     while (running ):
         pygame.mouse.set_visible(0)
         life=a_block.life
-        if life<=0 and a_block.aoa <= 0: # FIX CALL TO VARIABLE. REPLACE WITH METHOD
+        if life<=0 and a_block.aoa <= 0: 
             running=False
-        if not monster_group and life>0: # defeted all monsters -> procceed to new room
+        if not monster_group and life>0: 
             if level % 2 == 0:
               ShopGenerator(s)
               shop = False
@@ -125,11 +125,10 @@ if(__name__=="__main__"):
             a_block.set_owner(a_block)
             player_group.add(a_block)
             running = True
-            walls=[] # should change name to collidables
+            walls=[] 
             running = True
             missiles = pygame.sprite.RenderUpdates()
             animation_counter=0
-            #floor = pygame.image.load("images/floor.png")
             
             if(level == 2):
               make_boss_map(floor_group,walls,a_block,monster_group,items_group,level,collidables)
@@ -182,10 +181,7 @@ if(__name__=="__main__"):
             if (event.type==pygame.QUIT):
                 running=False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #if event.button == 3:
-                 #   leinput= ask(window, "Name")
                 if (event.button == 1 and a_block.get_ammo() > 0):
-                    #if a_block.ammo>0:
                     missiles.add(Missile("images/missile_2.png",a_block.rect.center,(event.pos[0],event.pos[1]),window,walls,monster_group,number_of_particles,my_particles,a_block.get_spldmg(),a_block.get_pie()) )
                     a_block.increment_ammo(-1)
                 if event.button == 3:
@@ -202,12 +198,9 @@ if(__name__=="__main__"):
         s.fill((0,0,0))
         mask.fill((0,0,0))
         s.blit(window,(200-offset[0]/2,200-offset[1]/2)) # dia 2 gia na min kanei scroll oso grigora oso kounieme.(dinei mia aisthish xorou anti apla na kouniete to map oso kouniete o pexths me apotelesma na fenete statheros o pexths)
-        #s.blit(fog,(0,0))
-        #s.blit(window, (background_rect.x+camera[0],background_rect.y+camera[1]),(0+camera[0],0+camera[1], 100, 100))
         if walk_counter_player == walk_counter_max_player-1:
             handle_event(event,key,a_block,block_group,player_group,walls,animation_counter,animation_interval,camera,monster_group,items_group,collidables,s,window)
         clock.tick(fps)
-        #monster.render(monster_group,monster,a_block)
         floor_group.draw(window)
         items_group.draw(window)
         block_group.draw(window)
@@ -228,7 +221,6 @@ if(__name__=="__main__"):
             t -= delta
             radius -= delta
         pygame.draw.circle(mask,(0,0,0,95),(light_pos),radius)
-       #pygame.draw.circle(mask,(0,0,0,0),(400,275),50)
         s.blit(mask,(200-offset[0]/2,200-offset[1]/2))
         s.blit(text,(100,0))
         if a_block.get_ammoType() == 1 :
@@ -261,17 +253,10 @@ if(__name__=="__main__"):
           a_block.increment_invisibility(-1)
           x = str (a_block.get_invisibility())
           text=basicfont.render(x,True,(0,128,102))
-          #s.blit(aoaicon,(50,70))
-          #s.blit(text,(62,102))
           if(a_block.get_invisibility () % 5 >= 0): #every fifty frames blink image
             a_block.image=pygame.image.load('images/blank.png')
             a_block.image.set_colorkey((255,255,255))
-       # if selectorA > 0: # < 5 (stay for five frames) and > 0 (don't trigger if mousepos is (0,0) ie mouse hasn't been clicked since game start (it causes blit erros too)
         mousepos = pygame.mouse.get_pos()
         window.blit(selector,mousepos) # when you blit something at mousepoint it starts from its top left corner. so -32/2 to get it to print it with the middle under the mousepos
-            #selectorA += 1 #stay for 5 frames
-            #print a_block.rect.collidepoint(mousepos[0]-(32/2),mousepos[1]-(32/2))
         pygame.display.flip()
     pygame.quit
-#if selectorA >0 selectorA < 5 and :
-#   s.blit(selector,mousepos) # kane blit mono ean kano click! 

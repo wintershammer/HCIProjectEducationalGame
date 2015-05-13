@@ -1,0 +1,187 @@
+
+\documentclass{article}
+
+
+
+\begin{document}
+
+\raggedright
+
+\section{Class: Monster}
+
+Base class for enemies
+
+
+\section{Methods} :
+
+\textbf{\_\_init\_\_ }: Constructor, sets default values
+
+\textbf{pickHP}: Returns healthPool array of enemy HP s
+
+\textbf{set\_attack\_mode}: sets attack mode (melee or ranged)
+
+\textbf{set\_range}: sets range of attack for enemy
+
+\textbf{get\_attack\_mode}: returns attack mode
+
+\textbf{get\_shield }: returns shield value (can be greater than one if enemy has multiple shield layers)
+
+\textbf{increment\_shield}: increments shield value
+
+\textbf{get\_range}: returns range of attack of enemy
+
+\textbf{create\_orc}: creates orc enemy
+
+\textbf{create\_tree}: creates tree enemy
+
+\textbf{set\_twin}: sets twin boss value (true or false)
+
+\textbf{create\_boss}: creates the twins
+
+\textbf{set\_damage}: sets damage value
+
+\textbf{get\_damage}: gets damage value
+
+
+\textbf{get\_shield}: gets shield value
+
+\textbf{set\_owner}: sets owner (useful for batch operations ie multiple deletes/deaths)
+
+\textbf{set\_health}: Creates the equation-type health bars
+
+\textbf{set\_position}: sets the spatial coordinates (zero is top left of the map)
+
+\textbf{move}: moves sprite (could use an animation function)
+
+\textbf{set\_image}: sets sprite image
+
+\textbf{distance\_to}: returns Euclidian norm of the vector starting in center of self position and ending in other's center
+
+
+\textbf{move\_towards}: Naive pathfinding. Constructs vector from self to other, normalises it, converts it to an integer so that movement is restricted to a grid abstraction, checks for collision and for neighbouring enemies, and then changes $dx/dy$ accordingly to follow the vector
+
+\textbf{knockback}: Moves sprite in direction opposite to that of the current movement vector, to simulate knockback in battle.
+
+\textbf{Ai }: naïve ai function, if player is within range move towards him
+
+\textbf{death}: handles damage to and death of  monster (removes self.owner from monster\_group)
+
+\textbf{death\_twins}: similar to the above function, but this one checks if the first twin is dead 
+before dealing damage to the second one
+
+
+
+\section{Class: Block}
+
+Base class for player
+
+\textbf{\_\_init\_\_ }: constructor, sets default values
+
+
+\textbf{equip\_item}: equips appropriate item, effect\_type if the type of the item and  effect\_value is ammo/charges
+
+\textbf{increment\_powercharge}: increments power spell's charge
+
+\textbf{get\_powercharge}: returns remaining charges for power spell
+
+\textbf{get\_pie}: returns pie status (true if player has pie, false otherwise)
+
+\textbf{set\_owner}: sets owner object, useful for death/removal etc
+
+\textbf{set\_life}: sets HP value
+
+\textbf{set\_position}: sets position based on coordinates $x,y$ (0 is top left of the map, MAP\_SIZE is defined in main game loop)
+
+\textbf{move }: moves sprite after checking for collisions. Based on input from event handler
+\textbf{get\_spldmg}: returns current spell's damage 
+
+\textbf{get\_invisitibility}: returns invisibility status. While active invisibility grants immunity to damage
+
+\textbf{get\_ammo}: returns remaining ammo/charges of current weapon
+
+\textbf{get\_ammoDmg}: returns damage of current weapon
+
+\textbf{set\_ammo}: sets ammo value of “ammoType” to “value”
+
+\textbf{set\_ammoType}: sets current weapon type
+
+\textbf{get\_ammoType}: returns current weapon type
+
+\textbf{set\_Damages}: sets damage for each weapon type according to it's ammo 
+
+\textbf{set\_ammoDmg}: sets current ammo's damage value
+
+\textbf{increment\_invisibility}: increments self.invisibility value (for damage immunity)
+
+\textbf{increment\_ammo}: increments current remaining ammo values by “value”
+
+\textbf{death}: handles damage, plays hit sound,sets a brief invisibility window after getting hit and removes player from game if he is dead
+
+\textbf{set\_image}: sets sprites
+
+\textbf{set\_direction}: flips image to account for left/right facing player (removes  the need for right sprites, just flip the left ones)
+
+\section{Class: Codex}
+
+Default codex class
+
+\textbf{codexViewer}: displays the appropriate page of the codex (an image)
+
+\section{Class: Combat}
+
+Handles combat
+
+\textbf{combat}: handles enemies attacking player and particles/missiles stricking enemies
+
+\textbf{combat\_player\_attack}: handles player melee attack, accounts for twin's special conditions
+
+
+
+\section{Class: Item}
+
+Default item class
+
+\textbf{\_\_init\_\_}: constructor, sets default values
+
+\textbf{set\_owner}: useful for removing/handling objects in groups
+
+\textbf{set\_position}: sets spatial coordinates
+
+\textbf{set\_image}: sets sprite
+
+\textbf{distance\_to}: returns Euclidian norm of vector starting in “self” center and ending in “other” center
+
+\textbf{effects}: sets current effect\_type and effect\_value (usually charges)
+
+\textbf{pick\_up}: automatically give item to player if he collides with it
+
+\section{Class: Particle}
+
+\textbf{Handles particle effects}
+
+\textbf{\_\_init\_\_}: sets default values
+
+\textbf{display}: displays particle
+
+\textbf{move}: moves particle based on current angle and speed
+
+\textbf{function particle\_create}: creates particles and appends them to particle\_group for management
+
+\section{File : questioner.py}
+
+Handles Riddle
+
+\textbf{get\_key}: gets user niput
+
+\textbf{display\_box: helper function}: displays the message in a box in the middle of the screen
+
+\textbf{ask}: displays the riddle using display\_box, handles input
+
+\section{File: shop.py}
+
+Handles actual shop/Riddle Master using questioner functions
+
+\textbf{ShopGenerator}: generates and displays the Riddle Master event and checks 
+the answer
+
+\end{document}

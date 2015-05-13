@@ -224,17 +224,6 @@ def populateDungeon(map,room_x,room_y,max_monsters,monster_group,items_group,max
             monster_group.add(monster)
             
     x = random.randint(1,5)
-##    if x == 2 or x == 5:
-##        for i in range(0,max_items):
-##            bow = Item()
-##            bow.set_image("images/potion.png")
-##            if y==1:
-##                bow.set_image("images/bow_1.png")
-##            bow.set_position(room_x*32+x*2,room_y*32)
-##            bow.set_owner(bow)
-##            bow.effects(y+1,5)
-##            items_group.add(bow)
-
     for i in range (0,max_items):
         newItem = Item()
         if x == 1:

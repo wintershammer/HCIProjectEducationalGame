@@ -100,8 +100,6 @@ class Monster(pygame.sprite.Sprite):
             self.set_twin(2)
 
 
-    def increment_shield(self,value):
-        self.shield += value
         
     def set_damage(self,value):
         self.damage=value
@@ -122,8 +120,6 @@ class Monster(pygame.sprite.Sprite):
         formatter = random.randint (0,2)
         if (formatter == 0):
             self.hptext = str(var1+1) + "+" + str(var2) + "= ?"
-#        elif (formatter == 1):
-#            self.hptext = "?" + str(var2) + "= ?"
         else:
             compositter = random.randint(1,var2)
             composite = var2/compositter
@@ -172,13 +168,10 @@ class Monster(pygame.sprite.Sprite):
         if self.twin > 0 :
             minAllowed = 100
         
-        if collidables[self.rect.x/32+dx+1][self.rect.y/32+dy+1] == False and minDist > minAllowed : #hmm panta tha kolane ean einai sto minDist :/
+        if collidables[self.rect.x/32+dx+1][self.rect.y/32+dy+1] == False and minDist > minAllowed : 
             self.dx=dx
             self.dy=dy
             self.move(dx*self.speed, dy*self.speed)
-#        else:
-#            if collidables[self.rect.x/32+dx+1][self.rect.y/32+dy+1] == False:
-#             self.move_towards(target_x*-1,target_y*-1,walls,monster,monster_group,collidables)
         if minDist < minAllowed:
             dx = target_x - minX
             dy = target_y - minY
@@ -190,10 +183,6 @@ class Monster(pygame.sprite.Sprite):
                 self.dy= -dy
                 self.move(dx*self.speed, dy*self.speed)
     def knockback(self,knockback,walls,monster_group):
-        #for wall in walls:
-        #    if pygame.sprite.collide_mask(self,wall) != None:
-        #        monster_group.remove(self.owner)
-                #print"you knock the orc into the wall and kill him"
         if self.dx > 0: # Moving right; Hit the left side of the wall
             self.move(-knockback,0)
         if self.dx < 0: # Moving left; Hit the right side of the wall
@@ -218,37 +207,32 @@ class Monster(pygame.sprite.Sprite):
         if monster.distance_to(target) <= monster.range and monster.distance_to(target) >= 20 and walk_counter == walk_counter_max-1:
                 monster.move_towards(target.rect.x, target.rect.y,walls,monster,monster_group,collidables)
 
+
     def old_health(self,health):
         self.health = health
 
 
-##    def render(self,monster_group,monster,target):
-##        rendered_once = True
-##        if monster.distance_to(target) <= 70 and self.health>=0 and rendered_once:
-##            render_once = False
-##            monster_group.add(self.owner)
+
 
     def death(self,monster_group,damage,walls):
         self.set_range(999)
-        #self.range=100 # the monster is alert of your presence
         if self.health>20:
             self.knockback(5,walls,monster_group)
         else:
             self.speed=3
-            #print "ORC IS ENRAGED"
         if self.shield == 0:
             if damage == self.health :
                 self.health -= damage
             elif damage == 5: #5 is melee test damage for now. i should be getting this from player.get_meleeDmg()
                 self.health -= damage
 
-        self.hptext = str(self.health) #if you succeeded in killing them with your spell then well played! otherwise you now have to kill them with your melee attack >: booring
+        self.hptext = str(self.health) #if you succeeded in killing them with your spell then well played! otherwise you now have to kill them with your melee attack
         print (self.hptext)
 
         if self.health <= 0:
             monster_group.remove(self.owner)
 
-    def death_twins(self,monster_group,damage,walls): # TESTING:once i move them to their own class I will have no need for such awkward code.
+    def death_twins(self,monster_group,damage,walls): 
 
         self.hptext = str(self.health)
         print (self.hptext)

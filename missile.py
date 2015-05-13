@@ -35,9 +35,7 @@ class Missile(pygame.sprite.Sprite):
         
     def update(self,walls):
         speed = 5 #[self.speed_constant*(self.target[0] - self.rect.centerx),self.speed_constant*(self.target[1] - self.rect.centery)]
-        if self.target_hit != True:  # keep going after the end point is hit
-            #oso poio makria kaneis click toso poio grigora paei.(tha einai bow ara ama varas konta einai san na min vazeis pollh dinami)
-            #self.target_hit = True
+        if self.target_hit != True:  
             speed = [self.speed_constant*(self.target[0] - self.start_point[0]),self.speed_constant*(self.target[1] - self.start_point[1])]
         self.rect.move_ip(speed)
         if self.rect.left < 0 or self.rect.right > self.area.width or self.rect.top < 0 or self.rect.bottom > self.area.height:
@@ -45,12 +43,6 @@ class Missile(pygame.sprite.Sprite):
             self.kill()
         if self.rect.collidelist(walls) != -1 :
             self.kill()
-##        for wall in self.walls:
-##            if pygame.sprite.collide_mask(self,wall)!= None:
-##                self.target_hit=True
-##                coord=self.rect.center
-##                #particle(coord)
-##                #particle_create(coord,self.number_of_particles,self.my_particles,self.screen)
 
         for monster in self.monsters:
             if pygame.sprite.collide_mask(self,monster)!= None:
@@ -59,8 +51,6 @@ class Missile(pygame.sprite.Sprite):
                 else:
                     monster.death(self.monsters,int(self.damage),walls)
                 self.target_hit=True
-                coord=self.rect.center
-                #particle(coord)
-                #particle_create(coord,self.number_of_particles,self.my_particles,self.screen)    
+                coord=self.rect.center    
         if self.target_hit==True:
             self.kill()
